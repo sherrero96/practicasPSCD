@@ -1,0 +1,88 @@
+#*****************************************************************
+# File:   Makefile
+# Author: PSCD-Unizar
+# Date:   Enero 2017
+# Coms:   Genera sockets, cliente, servidor, image, monitor y anuncio para la práctica 5
+#         Ejecutar como "make"
+#         Para compilar en Hendrix (Solaris OS), descomentar
+#         "#${SOCKETSFLAGS}"
+#*****************************************************************
+
+# ######## #
+# COMANDOS #
+# ######## #
+RM = rm -f # Comando de limpieza
+CC = g++ # Comando de compilacion
+
+# ######################## # 
+# VARIABLES GLOBALES       #
+# Definimos:               #
+#   * Librería de sockets  # 
+#   * Cliente              #
+#   * Servidor             #
+#   * ServidorMulticliente #
+#	* ImageDonloader	   #
+# ######################## #
+SOCKET=Socket
+CLIENT=Cliente
+SERVER=Servidor
+MULTISERVER=ServidorMulticliente
+IMAGE = ImageDownloader
+MONITOR = monitorVallas
+ANUNCIO = anuncio
+
+# #################### #
+# FLAGS DE COMPILACION #
+# #################### #
+CPPFLAGS=-I. -I/usr/local/include -O2 -std=c++11 -lsockets # Flags compilacion
+LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm -lpthread -lcurl -lX11 # Flags linkado threads
+#SOCKETSFLAGS=-lsocket -lnsl # Flags linkado sockets (Solaris SunOS)
+
+.PHONY:all
+
+all: ${CLIENT} ${IMAGE} ${SERVER} 
+
+# SOCKETS
+# Compilacion libreria de Sockets
+${SOCKET}.o: ${SOCKET}.h ${SOCKET}.cpp
+	${CC} -c ${CPPFLAGS} ${SOCKET}.cpp
+#-----------------------------------------------------------
+# MONITOR
+${MONITOR}.o: ${MONITOR}.h ${MONITOR}.cc
+	${CC} -c ${CPPFLAGS} ${LDFLAGS} ${MONITOR}.cc
+#-----------------------------------------------------------
+# ANUNCIO
+${ANUNCIO}.o: ${ANUNCIO}.h ${ANUNCIO}.cc
+	${CC} -c ${CPPLAGS} ${ANUNCIO}.cc
+#-----------------------------------------------------------
+
+# CLIENTE
+# Compilacion
+${CLIENT}.o: ${CLIENT}.cpp
+	${CC} -c ${CPPFLAGS} ${CLIENT}.cpp
+
+# Linkado
+${CLIENT}: ${SOCKET}.o ${CLIENT}.o  
+	${CC} ${LDFLAGS} ${SOCKET}.o ${CLIENT}.o -o ${CLIENT} #${SOCKETSFLAGS} #descomentar para Hendrix
+#-----------------------------------------------------------
+# IMAGE DOWNLOADER
+${IMAGE}: ${IMAGE}.h ${IMAGE}.cpp
+	${CC} -c ${CPPFLAGS} ${IMAGE}.cpp
+#-----------------------------------------------------------
+# SERVIDOR
+# Compilacion
+${SERVER}.o: ${SERVER}.cpp 
+	${CC} -c ${CPPFLAGS} ${SERVER}.cpp
+
+# Linkado
+${SERVER}: ${SOCKET}.o ${SERVER}.o  ${ANUNCIO}.o ${IMAGE}.o  ${MONITOR}.o 
+	${CC} ${LDFLAGS}  ${ANUNCIO}.o ${IMAGE}.o  ${MONITOR}.o ${SOCKET}.o ${SERVER}.o -o ${SERVER} #${SOCKETSFLAGS} #descomentar para Hendrix
+#-----------------------------------------------------------
+
+
+
+# LIMPIEZA
+clean:
+	$(RM) ${SOCKET}.o
+	$(RM) ${CLIENT} ${CLIENT}.o
+	$(RM) ${SERVER} ${SERVER}.o

@@ -1,0 +1,36 @@
+NIP             Apellidos               Nombre
+----------------------------------------------
+698521          Herrero Barco           Sergio
+
+Dificultades:
+-------------
+Para la realizacion de esta practica no han surgido muchos problemas. Ha sido relativamente facil, lo unico algunos problemas debidos a fallos de sintaxis con el lenguaje de programacion, y para sincronizar el proceso
+de media y desviacion tipica.
+
+Descripción Ejercicio 1:
+------------------------
+El programa lo que realiza es la muestra por pantalla de tres cadenas
+de manera concurrente. Son tres cadenas que tienen ligada una tabulación
+De manera que una vez lanzados los hilos se van mostrando, por el
+orden que le da el Scheduler. La función sleep hace que se "duerman"
+una vez transcurrido el tiempo que se le ha asignado, para luego volver
+a reanudar el bucle.
+
+Ejercicio 2:
+------------
+Fichero : ejercicio_2.cpp
+Para compilar: g++ -std=c++11 -pthread ejercicio_2.cpp -o ejercicio_2
+
+Ejercicio 3:
+------------
+Ficheros: ejercicio_3.cpp Saludador.h Saludador.cpp
+Para compilar:
+g++ -std=c++11 -pthread Saludador.cpp -c
+g++ -std=c++11 -pthread Saludador.o ejercicio_3.cpp -o ejercicio_3
+
+Ejercicio 4:
+------------
+Ficheros: ejercicio_4.cpp 
+Para compilar:
+g++ -std=c++11 -pthread ejercicio_4.cpp -o ejercicio_4
+
